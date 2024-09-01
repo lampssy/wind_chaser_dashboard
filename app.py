@@ -1,23 +1,26 @@
-from fastapi import FastAPI
-import boto3
 import json
+
+import boto3
+from fastapi import FastAPI
+from mypy_boto3_kinesis.client import KinesisClient
+from mypy_boto3_kinesis.type_defs import GetRecordsOutputTypeDef
 
 app = FastAPI()
 
-kinesis_client = boto3.client("kinesis", region_name="us-west-2")
+kinesis_client: KinesisClient = boto3.client("kinesis", region_name="us-west-2")
 
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Windsurfing Monitoring System Dashboard!"}
+    return {"message": "Welcome to the Windsurfing Monitoring System Dashboard! PS: I love Gosia <3"}
 
 
 @app.get("/performance")
-def get_user_performance(user_id: int):
+def get_user_performance(user_id: int) -> dict:
     """
     Retrieve and return user performance data from Kinesis stream.
     """
-    response = kinesis_client.get_records(
+    response: GetRecordsOutputTypeDef = kinesis_client.get_records(
         StreamName="performance-stream", ShardIteratorType="LATEST"
     )
     records = response["Records"]
@@ -31,11 +34,11 @@ def get_user_performance(user_id: int):
 
 
 @app.get("/weather")
-def get_weather_conditions():
+def get_weather_conditions() -> dict:
     """
     Retrieve and return current weather conditions from Kinesis stream.
     """
-    response = kinesis_client.get_records(
+    response: GetRecordsOutputTypeDef = kinesis_client.get_records(
         StreamName="weather-stream", ShardIteratorType="LATEST"
     )
     records = response["Records"]
@@ -46,11 +49,11 @@ def get_weather_conditions():
 
 
 @app.get("/sessions")
-def get_track_sessions(user_id: int):
+def get_track_sessions(user_id: int) -> dict:
     """
     Retrieve and return data for past sessions from Kinesis stream.
     """
-    response = kinesis_client.get_records(
+    response: GetRecordsOutputTypeDef = kinesis_client.get_records(
         StreamName="sessions-stream", ShardIteratorType="LATEST"
     )
     records = response["Records"]
