@@ -23,17 +23,13 @@ jobs:
       run: |
         poetry install
 
-    - name: Run black
+    - name: Install pre-commit
       run: |
-        poetry run black --check .
+        poetry run pre-commit install
 
-    - name: Run flake8
+    - name: Run pre-commit
       run: |
-        poetry run flake8 .
-
-    - name: Run isort
-      run: |
-        poetry run isort --check-only .
+        poetry run pre-commit run --all-files
         
   test:
     runs-on: ubuntu-latest
