@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-fastapi = "^0.112.0"
+fastapi = {extras = ["standard"], version = "^0.112.2"}
 uvicorn = "^0.30.6"
 boto3 = "^1.35.1"
 boto3-stubs = {extras = ["kinesis"], version = "^1.35.7"}
